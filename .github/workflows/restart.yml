@@ -1,0 +1,27 @@
+name: Restart HK Checker
+
+on:
+  workflow_run:
+    workflows:
+      - HK Stock Checker
+    types:
+      - completed
+
+permissions:
+  actions: write
+
+jobs:
+  restart:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Wait
+        run: sleep 10
+
+      - name: Restart checker
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run checker.yml \
+            --repo "${{ github.repository }}" \
+            --ref main
