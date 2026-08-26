@@ -40,7 +40,7 @@ def check_stock():
             return False
             
         # 구매 가능 여부 판단
-        is_available = "送出訂單" in page_source or "PRE-ORDER" in page_source or "Pre-Order" in page_source
+        is_available = "送出訂單" in page_source
         
         if is_available:
             send_alert(f"🚨 [홍콩 알림] 상품 구매 가능 상태 감지!\n주소: {TARGET_URL}")
