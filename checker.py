@@ -8,7 +8,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 
 
-TARGET_URL = "https://p-bandai.com/hk/item/AZ005710001"
+TARGET_URL = "https://p-bandai.com/hk/item/A2866726001"
 WEBHOOK_URL = "https://discord.com/api/webhooks/1541789079786487828/XvaI0Ol-R0z4Q4vp2E9U7SOX8ILXEvToXcnxYV1iSf-6-VdqHo2podEJP0VBXtg78f63"
 
 CHECK_INTERVAL = 60
