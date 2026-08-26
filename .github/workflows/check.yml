@@ -1,26 +1,30 @@
-name: hk-checker-1
+name: HK Stock Checker
 
 on:
-  schedule:
-    - cron: '*/1 * * * *'
   workflow_dispatch:
 
 jobs:
-  build:
+  checker:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+    timeout-minutes: 350
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: "3.10"
+
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
 
       - name: Install dependencies
         run: |
           pip install requests selenium webdriver-manager
 
-      - name: Run script
+      - name: Start checker
         run: |
           python checker.py
