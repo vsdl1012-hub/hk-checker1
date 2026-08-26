@@ -6,7 +6,7 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 
-TARGET_URL = "여기에_대만_또는_홍콩_상품_상세_URL_입력" 
+TARGET_URL = "https://p-bandai.com/hk/item/A2898622001" 
 WEBHOOK_URL = "https://discord.com/api/webhooks/1541789079786487828/XvaI0Ol-R0z4Q4vp2E9U7SOX8ILXEvToXcnxYV1iSf-6-VdqHo2podEJP0VBXtg78f63"
 
 def check_stock():
