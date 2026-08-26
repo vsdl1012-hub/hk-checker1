@@ -14,31 +14,40 @@ def check_stock():
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")
-    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36")
+    options.add_argument("--window-size=1920,1080")
+    options.add_argument("--lang=zh-TW")
+    options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option('useAutomationExtension', False)
+    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36")
 
     driver = None
     try:
         service = Service(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=options)
+        driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
         
         print(f"페이지 접속 중: {TARGET_URL}")
         driver.get(TARGET_URL)
         
-        # 자바스크립트 로딩 대기
-        time.sleep(5)
+        # 페이지 렌더링 대기
+        time.sleep(7)
         
-        page_text = driver.page_source.lower()
+        page_source = driver.page_source
         
-        # 1. 대만어 '送出訂單' 또는 2. 영어 'pre-order' 중 하나라도 있는지 검사
-        has_chinese_btn = "送出訂單" in driver.page_source
-        has_english_btn = "pre-order" in page_text
+        if "PAGE NOT AVAILABLE" in page_source:
+            print("홍콩 서버의 봇 차단(PAGE NOT AVAILABLE)에 걸렸습니다.")
+            return False
+            
+        # 구매 가능 여부 판단
+        is_available = "送出訂單" in page_source or "PRE-ORDER" in page_source or "Pre-Order" in page_source
         
-        if has_chinese_btn or has_english_btn:
-            send_alert(f"🚨 [알림] 대만 반다이 상품 구매 가능 상태 감지!\n주소: {TARGET_URL}")
-            print("구매 문구(送出訂單 또는 pre-order) 감지 성공!")
+        if is_available:
+            send_alert(f"🚨 [홍콩 알림] 상품 구매 가능 상태 감지!\n주소: {TARGET_URL}")
+            print("구매 문구 감지 성공 및 디스코드 알림 전송!")
             return True
         else:
-            print("아직 '送出訂單' 또는 'pre-order' 문구가 없습니다. (품절 상태)")
+            print("아직 구매 문구가 없습니다. (품절 상태)")
             return False
             
     except Exception as e:
